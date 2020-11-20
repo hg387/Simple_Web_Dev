@@ -1,7 +1,7 @@
 Himanshu Gupta
 ==============
 
-CS275-HW2-ReadMe Instructions: \ * This webpage displays the 7 days
+CS275-HW2-ReadMe Instructions:<br /> \ * This webpage displays the 7 days
 weather forecast provided the client id and the secret key for Aeris
 weather web service. \ * If the client id and secret key are
 authenticated then, depending on your location access, this webpage will
