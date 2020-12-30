@@ -1,0 +1,136 @@
+<html>
+<head>
+<title>CS275_HW4</title>
+<meta name="viewport" conten="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script>
+</script>
+
+<script>
+function html_render(type)
+{
+	if(type == "CALC"){
+		var URL = "http://localhost:8080/rendering_calc";
+	}
+	else{
+		var URL = "http://localhost:8080/rendering_weather";
+	}
+	$.ajax({
+			type: "GET",
+			url: URL,
+			contentType:"application/json; charset=utf-8",
+			data:"{}",
+			datatype: "html",
+			success: function(msg)
+			{
+				document.getElementById("display2").innerHTML=msg;
+			},
+			error: function()
+			{
+				alert("Error");
+			}
+		});	
+}
+
+function find_calc(form)
+{
+	var select = form.options.value;
+	var n = form.n_value.value;
+	var count = parseInt(n);
+
+	if(isNaN(count))
+	{
+		document.getElementById("display").innerHTML="Invalid";
+	}
+	
+	else if(count < 0)
+	{
+		document.getElementById("display").innerHTML="Non-negative numbers are not allowed";
+	}
+	
+	else if(select=="select_options")
+	{
+		document.getElementById("display").innerHTML="Please select an option";
+	}
+	
+	else
+	{
+		URL = "http://localhost:8080/"+select+"?n="+n;
+		$.ajax({
+			type: "GET",
+			url: URL,
+			contentType:"application/json; charset=utf-8",
+			data:"{n}",
+			datatype: "html",
+			success: function(msg)
+			{	
+				document.getElementById("display").innerHTML="The "+ select +" for "+ n +" is " + msg;
+			},
+			error: function()
+			{
+				document.getElementById("display").innerHTML="Error 404";
+	
+			}
+		});	
+	}
+}
+ 
+function generate_weather(){
+	var URL = "http://localhost:8080/display_weather";
+		$.ajax({
+		type: "POST",
+		url: URL,
+		contentType:"application/json; charset=utf-8",
+		data:"{}",
+		dataType:"html",
+		success: function(msg)
+		{
+			document.getElementById('display_weather').innerHTML=msg;
+		},
+		error: function(){
+			alert("Error");
+		}
+		});
+
+}
+</script>
+
+</head>
+<body>
+<div id="page 1" data-role="page" data-theme="a">
+<div data-role="panel" id="myPanel">
+<ul>
+	<li><a href="./">Home</a></li>
+	<li><a href="#" onClick="html_render('CALC')">Calculator</a></li>
+	<li><a href="#" onClick="html_render('WEATHER')">Weather</a></li>
+</ul>
+</div>
+<div data-role="header" data-theme="a">
+	<a href="#myPanel">Menu</a>
+	<h1>HW4</h1>
+	
+</div>
+<div data-role='content'>
+<center><img src="https://drexel.edu/~/media/Images/now/ui/og-drexel-logo.ashx" alt="CS275" height="300" width="300" /></center>
+<content>
+<center><p  id="display2"> <font size="7"> <b>Instructions: </b></font>
+<br><br>
+1) This webpage let you to use either the Calculator or the weather provider.<br><br>
+2) In calculator, you can use factorial or summation of a number, Choose the Calculator option present in the panel.<br>
+&nbsp;	-If the given input is a whole number, then following webpage will generate the clicked factorial or the summation series option.<br>
+&nbsp;	-However, there are certain restrictions for input values such as inputting a string value including empty string will output "Invalid."<br>
+&nbsp;	-Also, if input number is a negative value then the output will be "Negative numbers are not allowed."<br>
+&nbsp;	-Finally, click on the button "Clickit!" to generate the results of clicked factorial or the summation series option. <br><br>
+3) In order to generate the weather forcast table using your current location, choose the Weather option from the panel, then click on "Get the Weather" button.</p>
+</center>
+</content>
+
+</div>
+<div data-role="footer">
+	<h1>Himanshu Gupta</h1>
+</div>
+</div>
+</body>
+</html>

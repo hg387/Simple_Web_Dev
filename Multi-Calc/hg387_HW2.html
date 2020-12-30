@@ -1,0 +1,85 @@
+<html>
+<head>
+<title>hg387_HW2</title>
+<meta name="viewport" conten="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script>
+
+function requestweather(form)
+{
+	var key = form.uni_key.value;
+	var id = form.uni_ID.value;
+	if (key == "" || id == ''){
+		document.getElementById("display_weather").innerHTML = "Keys are left empty"; return;}
+	if (navigator.geolocation){
+		navigator.geolocation.getCurrentPosition(function(position){
+			
+			var lat = position.coords.latitude;
+			var lon = position.coords.longitude;
+			var URL = "http://api.aerisapi.com/forecasts/"+ lat +","+ lon +"?client_id="+ id +"&client_secret="+key;
+	
+			$.ajax({
+				type: "GET",
+				url: URL,
+				contentType: "application/json; charset=utf-8",
+				data:"{}",
+				dataType: "json",
+				success: function(msg){
+					var json = msg;
+					if (json.cod=200){
+						
+							var ob1 = json.response[0].periods;
+						
+							var table_print = "<div role=\"main\" class=\"ui-content\"><table border='1.5' data-role=\"table\" class=\"ui-responsive table-stroke\">"+"<thead><tr><th>Date</th><th>Max Temp. in Celsius</th><th>Min Temp. in Celsius</th><th>Avg. Temp. in Celsius</th></tr></thead>";
+							table_print = table_print + "<tbody>";
+							for(var i=0;i<7;i++){
+								table_print=table_print + "<tr><th>" + json.response[0].periods[i].validTime.slice(0, 10) + "</th><td>" + json.response[0].periods[i].maxTempC + "</td><td>" + json.response[0].periods[i].minTempC +"</td><td>" + json.response[0].periods[i].avgTempC +"</td></tr>"; 
+								}
+							table_print = table_print + "</tbody></table></div>";
+							document.getElementById("display_weather").innerHTML = table_print;
+						
+						
+						}
+					
+		},
+		fail: function(msg){
+						document.getElementById("display_weather").innerHTML = "Invalid Input";
+				},
+		
+		statusCode:{
+		400: function(msg){
+			document.getElementById("display_weather").innerHTML = "Entered keys are not correct";
+				
+		}}
+		
+		
+		});
+			});
+			} 
+	else 
+		{document.getElementById("display_weather").innerHTML = "Geolocation is not supported by this browser.";}
+	
+	
+}
+
+</script>
+</head>
+<body>
+<div id="page 1" data-role="page" data-theme="a">
+<div data-role="header" data-theme="a">
+	<h1>Daily weather forecast</h1>
+</div>
+
+
+<form>
+
+<button type="button" onClick="requestweather(this.form)">Get the weather</button>
+</form>
+<center><div id="display_weather"></div></center>
+<div data-role="footer" data-theme="a"> <h1> CS275 HW2 #Himanshu Gupta #14266688 </h1></div>
+</div>
+</body>
+
+</html>

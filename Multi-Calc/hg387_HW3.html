@@ -1,0 +1,70 @@
+<html>
+<head>
+<title>CS275_HW3</title>
+<meta name="viewport" conten="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script>
+
+function find_calc(form)
+{
+	var select = form.options.value;
+	var n = form.n_value.value;
+	var count = parseInt(n);
+
+	if(isNaN(count))
+	{
+		document.getElementById("display").innerHTML="Invalid";
+	}
+	
+	else if(count < 0)
+	{
+		document.getElementById("display").innerHTML="Non-negative numbers are not allowed";
+	}
+	
+	else if(select=="select_options")
+	{
+		document.getElementById("display").innerHTML="Please select an option";
+	}
+	
+	else
+	{
+		URL = "http://localhost:8080/"+select+"?n="+n;
+		$.ajax({
+			type: "GET",
+			url: URL,
+			contentType:"application/json; charset=utf-8",
+			data:"{n}",
+			datatype: "html",
+			success: function(msg)
+			{	
+				document.getElementById("display").innerHTML="The "+ select +" for "+ n +" is " + msg;
+			},
+			error: function()
+			{
+				document.getElementById("display").innerHTML="Error 404";
+	
+			}
+		});	
+	}
+}
+</script>
+</head>
+
+<body>
+<H1>#CS275_HW3<br> #Himanshu Gupta<br> #14266688</H1>
+<form>
+<input type="text" id="n_value">
+<select id="options">
+<option value="select_options">Select options</option>
+<option value="factorial">Calculate factorial</option>
+<option value="sum">Sum</option>
+</select>
+<input type="button" value="Clickit!" onClick="find_calc(this.form)"/>
+</form>
+
+
+<center><div id="display"></div></center>
+</body>
+</html>
