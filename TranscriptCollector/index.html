@@ -1,0 +1,250 @@
+<html>
+<head>
+<title>CS275_HW5</title>
+<meta name="viewport" conten="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script>
+function main()
+{
+	var URL = "http://localhost:8080/main";
+	
+	$.ajax
+	({
+		type: "GET",
+		url: URL,
+		contentType: "application/json; charset=utf-8",
+		data:"{}" ,
+		dataType: "html",
+		success: function(msg)
+		{
+			document.getElementById("display3").innerHTML = msg;
+		},
+		
+		error: function(){
+			alert("Error");
+		}
+		});
+
+}
+
+function display_table()
+{
+	var display_select = document.getElementById("display_select");
+	
+	var selection = display_select.options[display_select.selectedIndex].value;
+	
+	if (selection == "student")
+	{
+		display_student();
+	}
+	
+	else if (selection == "course")
+	{
+		display_course();
+	}
+	
+	else if (selection == "grades")
+	{
+		display_grades();
+	}
+}
+
+function display_student()
+{
+	var URL="http://localhost:8080/display_student";
+	
+	$.ajax
+	({
+		type: "GET",
+		url: URL,
+		contentType: "application/json",
+		data:"{}",
+		dataType:"html",
+		success: function(msg)
+		{
+			document.getElementById("display").innerHTML = msg;
+		},
+		error: function(){
+			alert("Error in display_student()");
+		}
+	});
+}
+
+function display_course()
+{
+	var URL="http://localhost:8080/display_course";
+	
+	$.ajax
+	({
+		type: "GET",
+		url: URL,
+		contentType: "application/json",
+		data:"{}",
+		dataType:"html",
+		success: function(msg)
+		{
+			document.getElementById("display").innerHTML = msg;
+		},
+		error: function(){
+			alert("Error in display_course()");
+		}
+	});
+}
+
+function display_grades()
+{
+	var URL="http://localhost:8080/display_grades";
+	
+	$.ajax
+	({
+		type: "GET",
+		url: URL,
+		contentType: "application/json",
+		data:"{}",
+		dataType:"html",
+		success: function(msg)
+		{
+			document.getElementById("display").innerHTML = msg;
+		},
+		error: function(){
+			alert("Error in display_grades()");
+		}
+	});
+}
+
+function search1()
+{
+	var URL = "http://localhost:8080/search";
+	$.ajax
+	({
+		type: "GET",
+		url: URL,
+		contentType: "application/json",
+		data:"{}",
+		dataType:"html",
+		success: function(msg)
+		{
+			document.getElementById("display3").innerHTML = msg;
+		},
+		error: function(){
+			alert("Error in search1()");
+		}
+	});
+	
+}
+
+function display_Trans()
+{
+	var URL = "http://localhost:8080/display_Trans";
+	
+	var stud_dropdown = $("#s_opts").get(0);
+	var term_dropdown = $("#t_opts").get(0);
+	var s_opt = stud_dropdown.options[stud_dropdown.selectedIndex].value;
+	var t_opt = term_dropdown.options[term_dropdown.selectedIndex].value;
+	//document.getElementById("display3").innerHTML = s_opt;
+	//document.getElementById("display3").innerHTML = t_opt;
+	var info = { 's':s_opt, 't':t_opt};
+	$.ajax
+	({
+		type: "GET",
+		url: URL,
+		contentType: "application/json",
+		data:info,
+		dataType:"html",
+		success: function(msg)
+		{
+			document.getElementById("out").innerHTML = msg;
+		},
+		error: function(){
+			alert("Error in display_Trans()");
+		}
+	});
+}
+
+function main2()
+{
+	var URL = "http://localhost:8080/main2";
+	$.ajax
+	({
+		type: "GET",
+		url: URL,
+		contentType: "application/json",
+		data:"{}",
+		dataType:"html",
+		success: function(msg)
+		{
+			document.getElementById("display3").innerHTML = msg;
+		},
+		error: function(){
+			alert("Error in main2()");
+		}
+	});
+}
+
+function addStudent()
+{
+	var URL = "http://localhost:8080/addStudent";
+	var info1 = $("#studentform").serialize();
+	//document.getElementById("display3").innerHTML = info1;
+	$.ajax
+	({
+		type: "POST",
+		url: URL,
+		
+		data:info1,
+		dataType:"html",
+		success: function(msg)
+		{
+			document.getElementById("out").innerHTML = msg;
+		},
+		error: function(){
+			alert("Error in addStudent()");
+		}
+	});
+}
+
+
+</script>
+
+</head>
+<body>
+<div id="page 1" data-role="page" data-theme="a">
+<div data-role="panel" id="myPanel">
+<ul>
+	<li><a href="./">Home</a></li>
+	<li><a href="#" onClick="main()">Tables</a></li>
+	<li><a href="#" onClick="search1()">Transcript</a></li>
+	<li><a href="#" onClick="main2()">Add Student</a></li>
+</ul>
+</div>
+<div data-role="header" data-theme="a">
+	<a href="#myPanel">Menu</a>
+	<h1>HW5</h1>
+	
+</div>
+
+<center><img src="https://drexel.edu/~/media/Images/now/ui/og-drexel-logo.ashx" alt="CS275" height="300" width="300" /></center>
+<div id="display3" data-role="display3" class="ui-content">
+<content>
+<center><p  id="display2"> <font size="7"> <b>Instructions: </b></font>
+<br><br>
+1) This webpage let you to get the tables derived from Student, courses or grades basis.<br><br>
+2) Also, There is a option to add a student in the current database.<br>
+&nbsp;	-First of all, import the file 'DUMPHW5.sql' into the your database.<br>
+&nbsp;	-To use the above options, click on the Menu option placed on left top corner .<br>
+&nbsp;	-Menu panel has three options Home, Tables, Transcript and Add Student<br>
+&nbsp;	-As the names suggest, Table option generate table, Add Student option add a student and Home options will get you to main page<br>
+&nbsp;	-The transcript option let you to select student name and term/year to generate report of grades for respective credentials.<br>
+3) Further Instructions are given on the respective pages.</p>
+</center>
+</content>
+</div>
+
+<div data-role="footer">
+	<h1>Himanshu Gupta</h1>
+</div>
+</div>
+</body>
+</html>
